@@ -52,12 +52,12 @@ func updateDeployment() {
 
 	if err != nil {
 		fmt.Println("Call to API failed" + err.Error())
-		os.Exit(-1)
+		os.Exit(1)
 	}
 	if resp.IsError() {
 		fmt.Println("HTTP Return Code: " + strconv.Itoa(resp.StatusCode()))
 		fmt.Println(resp.String())
-		os.Exit(-1)
+		os.Exit(1)
 	}
 
 }

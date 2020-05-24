@@ -1,0 +1,7 @@
+---
+product:
+    name: MGTEST
+    statusPage: "https://statuspage.com"
+    repositoryUrl: "https://github.com/mgudmund/deployment-api-cli"
+    productName: MGTESTProduct
+    capabilityName: SP

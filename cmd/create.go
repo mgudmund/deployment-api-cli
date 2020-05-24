@@ -2,16 +2,28 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v2"
 )
 
 var Environment string
 var CommitSha string
 var Version string
+
+type YamlSpec struct {
+	Product struct {
+		Name           string `yaml:"name"`
+		StatusPage     string `yaml:"statusPage"`
+		RepositoryUrl  string `yaml:"repositoryUrl"`
+		ProductName    string `yaml:"productName"`
+		CapabilityName string `yaml:"capabilityName"`
+	}
+}
 
 var createCmd = &cobra.Command{
 	Use:   "create",
@@ -41,10 +53,6 @@ func init() {
 
 func createDeployment() (loc string) {
 
-	//Get env vars
-	url := os.Getenv("DEPLOYMENT_API_URL")
-	token := os.Getenv("DEPLOYMENT_API_TOKEN")
-
 	type Deployment struct {
 		Name           string `json:"name"`
 		Version        string `json:"version"`
@@ -57,6 +65,10 @@ func createDeployment() (loc string) {
 		CapabilityName string `json:"capabilityName"`
 	}
 
+	//Get env vars
+	url := os.Getenv("DEPLOYMENT_API_URL")
+	token := os.Getenv("DEPLOYMENT_API_TOKEN")
+	productSpec := getProductSpec()
 	client := resty.New()
 
 	if Verbose {
@@ -70,15 +82,15 @@ func createDeployment() (loc string) {
 		SetAuthScheme("Bearer").
 		SetAuthToken(token).
 		SetBody(Deployment{
-			Name:           "mgtest1",
+			Name:           productSpec.Product.Name,
 			Version:        Version,
-			StatusPage:     "none",
-			RepositoryUrl:  "none",
+			StatusPage:     productSpec.Product.StatusPage,
+			RepositoryUrl:  productSpec.Product.RepositoryUrl,
 			CommitSha:      CommitSha,
 			Environment:    Environment,
 			Status:         "created",
-			ProductName:    "mgtest1-prod",
-			CapabilityName: "SP",
+			ProductName:    productSpec.Product.ProductName,
+			CapabilityName: productSpec.Product.CapabilityName,
 		}).
 		Post(url + "/deployments/")
 
@@ -89,7 +101,29 @@ func createDeployment() (loc string) {
 	if resp.IsError() {
 		fmt.Println("HTTP Return Code: " + strconv.Itoa(resp.StatusCode()))
 		fmt.Println(resp.String())
-		os.Exit(-1)
+		os.Exit(1)
 	}
 	return resp.Header().Get("Location")
+}
+
+func getProductSpec() (productSpec YamlSpec) {
+
+	specFile := "product-spec.yaml"
+	// Check for product-spec.yaml
+	if _, err := os.Stat(specFile); err != nil {
+		fmt.Printf("The file product-spec.yaml does not exist, but expected by cli.\n")
+		os.Exit(1)
+	}
+	// Get values from product-spec.yaml
+	yamlBuf, err := ioutil.ReadFile(specFile)
+	if err != nil {
+		fmt.Println("Error reading "+specFile+": #%v", err)
+	}
+	var yamlSpec YamlSpec
+	err = yaml.Unmarshal(yamlBuf, &yamlSpec)
+	if err != nil {
+		fmt.Println("Error unmarshalling:" + err.Error())
+	}
+	return yamlSpec
+
 }

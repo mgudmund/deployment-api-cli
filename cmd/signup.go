@@ -70,12 +70,12 @@ func signUp() (pwd string) {
 
 	if err != nil {
 		fmt.Println("Call to API failed" + err.Error())
-		os.Exit(-1)
+		os.Exit(1)
 	}
 	if resp.IsError() {
 		fmt.Println("HTTP Return Code: " + strconv.Itoa(resp.StatusCode()))
 		fmt.Println(resp.String())
-		os.Exit(-1)
+		os.Exit(1)
 	}
 	var signupreq signUpRequest
 	json.Unmarshal([]byte(resp.String()), &signupreq)
@@ -108,12 +108,12 @@ func getToken(pwd string) (token string) {
 
 	if err != nil {
 		fmt.Println("Call to API failed" + err.Error())
-		os.Exit(-1)
+		os.Exit(1)
 	}
 	if resp.IsError() {
 		fmt.Println("HTTP Return Code: " + strconv.Itoa(resp.StatusCode()))
 		fmt.Println(resp.String())
-		os.Exit(-1)
+		os.Exit(1)
 	}
 	var tokenreq Token
 	json.Unmarshal([]byte(resp.String()), &tokenreq)
