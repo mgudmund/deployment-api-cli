@@ -1,6 +1,6 @@
 ---
 product:
-    name: MGTEST
+    name: MGTEST2
     statusPage: "https://statuspage.com"
     repositoryUrl: "https://github.com/mgudmund/deployment-api-cli"
     productName: MGTESTProduct
