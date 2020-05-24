@@ -59,7 +59,9 @@ func createDeployment() (loc string) {
 
 	client := resty.New()
 
-	client.SetDebug(true)
+	if Verbose {
+		client.SetDebug(true)
+	}
 
 	// POST JSON string
 	// No need to set content type, if you have client level setting

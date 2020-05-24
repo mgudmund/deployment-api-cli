@@ -39,9 +39,9 @@ func updateDeployment() {
 	token := os.Getenv("DEPLOYMENT_API_TOKEN")
 
 	client := resty.New()
-
-	client.SetDebug(true)
-
+	if Verbose {
+		client.SetDebug(true)
+	}
 	// POST JSON string
 	// No need to set content type, if you have client level setting
 	resp, err := client.R().
@@ -59,6 +59,5 @@ func updateDeployment() {
 		fmt.Println(resp.String())
 		os.Exit(-1)
 	}
-	fmt.Println(resp.StatusCode())
 
 }
