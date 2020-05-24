@@ -16,6 +16,7 @@ func init() {
 	rootCmd.AddCommand(updateCmd)
 	updateCmd.Flags().StringVarP(&DeploymentId, "deploymentid", "d", "", "Deployment ID")
 	updateCmd.Flags().StringVarP(&Status, "status", "s", "", "Deployment status")
+
 	updateCmd.MarkFlagRequired("deploymentid")
 	updateCmd.MarkFlagRequired("status")
 
@@ -26,7 +27,9 @@ var updateCmd = &cobra.Command{
 	Short: "Update deployment",
 	Long:  `Use this to update the deployment with a new status.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		updateDeployment()
 		fmt.Println("Updated deployment with id: " + DeploymentId)
+
 	},
 }
 
@@ -35,24 +38,17 @@ func updateDeployment() {
 	url := os.Getenv("DEPLOYMENT_API_URL")
 	token := os.Getenv("DEPLOYMENT_API_TOKEN")
 
-	type DeploymentUpdate struct {
-		DepId  string `json:"depid"`
-		Status string `json:"status"`
-	}
-
 	client := resty.New()
-	//client.SetDebug(true)
+
+	client.SetDebug(true)
+
 	// POST JSON string
 	// No need to set content type, if you have client level setting
 	resp, err := client.R().
 		SetHeader("Content-Type", "application/json").
 		SetAuthScheme("Bearer").
 		SetAuthToken(token).
-		SetBody(DeploymentUpdate{
-			DepId:  DeploymentId,
-			Status: Status,
-		}).
-		Patch(url + "/deployments/")
+		Patch(url + "/deployments/" + DeploymentId + "?status=" + Status)
 
 	if err != nil {
 		fmt.Println("Call to API failed" + err.Error())
@@ -63,5 +59,6 @@ func updateDeployment() {
 		fmt.Println(resp.String())
 		os.Exit(-1)
 	}
+	fmt.Println(resp.StatusCode())
 
 }
