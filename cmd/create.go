@@ -3,14 +3,15 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/spf13/cobra"
 )
 
-func init() {
-	rootCmd.AddCommand(createCmd)
-}
+var Environment string
+var CommitSha string
+var Version string
 
 var createCmd = &cobra.Command{
 	Use:   "create",
@@ -18,8 +19,24 @@ var createCmd = &cobra.Command{
 	Long:  `Use this to create a new deployment. Retuns the deployment id`,
 	Run: func(cmd *cobra.Command, args []string) {
 		location := createDeployment()
-		fmt.Println("Placeholder: created deployment with id: " + location)
+		if location == "" {
+			fmt.Println("No deployment created.")
+		} else {
+			fmt.Println("Deployment ID: " + location)
+		}
 	},
+}
+
+func init() {
+
+	rootCmd.AddCommand(createCmd)
+	createCmd.Flags().StringVarP(&Environment, "environment", "e", "", "Deployment Environment")
+	createCmd.Flags().StringVarP(&CommitSha, "commitsha", "c", "", "Git Commit SHA")
+	createCmd.Flags().StringVarP(&Version, "version", "v", "", "Product version as semver")
+	createCmd.MarkFlagRequired("environment")
+	createCmd.MarkFlagRequired("commitsha")
+	createCmd.MarkFlagRequired("version")
+
 }
 
 func createDeployment() (loc string) {
@@ -39,21 +56,6 @@ func createDeployment() (loc string) {
 		ProductName    string `json:"productName"`
 		CapabilityName string `json:"capabilityName"`
 	}
-	/*d := Deployment{
-		name:           "mgtest1",
-		version:        "v0.0.1",
-		statusPage:     "none",
-		repositoryUrl:  "none",
-		commitSha:      "none",
-		environment:    "Prod",
-		status:         "created",
-		productName:    "mgtest1-prod",
-		capabilityName: "techarch",
-	}*/
-	/*if err != nil {
-		fmt.Println("Error creating json object")
-		os.Exit(-1)
-	}*/
 
 	client := resty.New()
 	//client.SetDebug(true)
@@ -65,11 +67,11 @@ func createDeployment() (loc string) {
 		SetAuthToken(token).
 		SetBody(Deployment{
 			Name:           "mgtest1",
-			Version:        "v0.0.1",
+			Version:        Version,
 			StatusPage:     "none",
 			RepositoryUrl:  "none",
-			CommitSha:      "none",
-			Environment:    "production",
+			CommitSha:      CommitSha,
+			Environment:    Environment,
 			Status:         "created",
 			ProductName:    "mgtest1-prod",
 			CapabilityName: "SP",
@@ -81,8 +83,9 @@ func createDeployment() (loc string) {
 		os.Exit(-1)
 	}
 	if resp.IsError() {
-		fmt.Println(resp.StatusCode())
+		fmt.Println("HTTP Return Code: " + strconv.Itoa(resp.StatusCode()))
+		fmt.Println(resp.String())
+		os.Exit(-1)
 	}
-
 	return resp.Header().Get("Location")
 }
