@@ -24,7 +24,7 @@ var createCmd = &cobra.Command{
 
 func createDeployment() (loc string) {
 
-	//Get env Vars
+	//Get env vars
 	url := os.Getenv("DEPLOYMENT_API_URL")
 	token := os.Getenv("DEPLOYMENT_API_TOKEN")
 
