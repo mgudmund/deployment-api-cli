@@ -7,7 +7,7 @@ Sample can be found in this repo.
 
 ## Startup Workflow
 
-1. Sign-up using the sign-up command. You'll get a token that you will need to put in an environment variable called DEPLOYMENT_API_CLI
+1. Sign-up using the sign-up command. You'll get a token that you will need to put in an environment variable called DEPLOYMENT_API_TOKEN
 2. Run commands needed to track metrics
 
 ## Deployment workflow
