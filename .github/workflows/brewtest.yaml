@@ -17,7 +17,8 @@ jobs:
     - name: Install
       run: |
         brew tap mgudmund/deployment-api-cli
-	brew search deployment-api-cli 
+        brew search deployment-api-cli
+        brew install homebrew/mgudmund/deployment-api-cli 
         
     - name: Test
       run: deployment-api-cli help
