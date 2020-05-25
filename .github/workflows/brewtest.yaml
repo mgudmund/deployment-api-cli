@@ -1,4 +1,4 @@
-name: Brew Test
+name: Brew Tester
 
 on:
   push:
