@@ -1,0 +1,25 @@
+name: Brew Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    
+    - name: Install
+      run: |
+        brew tap mgudmund/deployment-api-cli
+        brew install deployment-api-cli
+        
+    - name: Test
+      run: deployment-api-cli help
+
+   
