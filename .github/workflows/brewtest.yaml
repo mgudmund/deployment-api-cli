@@ -15,11 +15,8 @@ jobs:
 
     
     - name: Tap
-      run: brew tap mgudmund/deployment-api-cli
+      run: brew install mgudmund/deployment-api-cli
 
-    - name: Search
-      run: brew search deployment-api-cli
-        
     - name: Test
       run: deployment-api-cli help
 
