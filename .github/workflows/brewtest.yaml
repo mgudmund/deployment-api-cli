@@ -14,10 +14,11 @@ jobs:
     steps:
 
     
-    - name: Install
-      run: |
-        brew tap mgudmund/deployment-api-cli
-        brew search deployment-api-cli
+    - name: Tap
+      run: brew tap mgudmund/deployment-api-cli
+
+    -name: Search
+      run: brew search deployment-api-cli
         
     - name: Test
       run: deployment-api-cli help
