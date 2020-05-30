@@ -7,7 +7,9 @@ on:
     branches: [ master ]
 
 jobs:
-
+  env: 
+    DEPLOYMENT_API_TOKEN: ${{ secrets.DEPLOYMENT_API_TOKEN }}
+    DEPLOYMENT_URL: ${{ secrets.DEPLOYMENT_URL }}
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -25,6 +27,7 @@ jobs:
     ## Deployment Tracking
     - name: Register Deployment
       run: echo ::set-env name=DEPLOYMENT_TRACK_ID::$(deployment-api-cli create -e production -v 1.2 -c $GITHUB_SHA| awk '{print $2}')
+      
 
     ## Run deploy
     - name: Deploy App
