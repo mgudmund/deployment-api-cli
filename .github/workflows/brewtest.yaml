@@ -27,7 +27,7 @@ jobs:
       run: echo ::set-env name=DEPLOYMENT_TRACK_ID::$(deployment-api-cli create -e production -v 1.2 -c $GITHUB_SHA| awk '{print $2}')
       env: 
         DEPLOYMENT_API_TOKEN: ${{ secrets.DEPLOYMENT_API_TOKEN }}
-        DEPLOYMENT_URL: ${{ secrets.DEPLOYMENT_URL }}
+        DEPLOYMENT_API_URL: ${{ secrets.DEPLOYMENT_API_URL }}
 
     ## Run deploy
     - name: Deploy App
