@@ -12,15 +12,15 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    #- name: Setup Deployment tracking CLI
-    #  run: |
-    #    wget https://github.com/mgudmund/deployment-api-cli/releases/download/v1.0-alpha/deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz 
-    #    tar -zxvf deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz
-    #    sudo mv deployment-api-cli /usr/bin/
-    - name: Setup Deployment Tracking CLI
+    - name: Setup Deployment tracking CLI
       run: |
-          brew tap mgudmund/deployment-api-cli
-          brew install deployment-api-cli
+        wget https://github.com/mgudmund/deployment-api-cli/releases/download/v1.0-alpha/deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz 
+        tar -zxvf deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz
+        sudo mv deployment-api-cli /usr/bin/
+    #- name: Setup Deployment Tracking CLI
+    #  run: |
+    #      brew tap mgudmund/deployment-api-cli
+    #      brew install deployment-api-cli
 
     ## Deployment Tracking
     - name: Register Deployment
