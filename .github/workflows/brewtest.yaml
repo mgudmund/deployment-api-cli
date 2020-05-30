@@ -24,7 +24,7 @@ jobs:
 
     ## Deployment Tracking
     - name: Register Deployment
-      run: echo ::set-env name=DEPLOYMENT_TRACK_ID::$(deployment-api-cli create -e production -v 1.2 -c $GITHUB_SHA| swk '{print $2}'')
+      run: echo ::set-env name=DEPLOYMENT_TRACK_ID::$(deployment-api-cli create -e production -v 1.2 -c $GITHUB_SHA| awk '{print $2}'')
 
     ## Run deploy
     - name: Deploy App
