@@ -12,15 +12,36 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-
-    
-    - name: Install Deployment API CLI
+    #- name: Setup Deployment tracking CLI
+    #  run: |
+    #    wget https://github.com/mgudmund/deployment-api-cli/releases/download/v1.0-alpha/deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz 
+    #    tar -zxvf deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz
+    #    sudo mv deployment-api-cli /usr/bin/
+    - name: Setup Deployment Tracking CLI
       run: |
-        wget https://github.com/mgudmund/deployment-api-cli/releases/download/v1.0-alpha/deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz 
-        tar -zxvf deployment-api-cli-v1.0-alpha.x86_64-linux.tar.gz
-        sudo mv deployment-api-cli /usr/bin/
+          brew tap mgudmund/deployment-api-cli
+          brew install deployment-api-cli
 
-    - name: Test
-      run: deployment-api-cli help
+    ## Deployment Tracking
+    - name: Register Deployment
+      run: echo ::set-env name=DEPLOYMENT_TRACK_ID::$(deployment-api-cli create -e production -v 1.2 -c $GITHUB_SHA| swk '{print $2}'')
+
+    ## Run deploy
+    - name: Deploy App
+      run: wait 20 && echo "Deployment Successful"
+
+    ## Deployment Tracking
+    - name: Set Successful Deployment
+      run: deployment-api-cli update -d $DEPLOYMENT_TRACK_ID -s success
+      if: ${{ success() }} 
+    
+    - name: Set Failed Deployment
+      run: deployment-api-cli update -d $DEPLOYMENT_TRACK_ID -s failure
+      if: ${{ failure() }}
+
+    - name: Set Cancelled Deployment
+      run: deployment-api-cli update -d $DEPLOYMENT_TRACK_ID -s cancelled
+      if: ${{ cancelled() }}
+  
 
    
