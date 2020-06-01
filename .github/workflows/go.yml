@@ -35,7 +35,13 @@ jobs:
 
     - name: Test
       run: go test -v .
+
     - name: Synopsys Detect
       uses: blackducksoftware/github-action@2.0.0
       with:
         args: '--blackduck.url="${{ secrets.BLACKDUCK_URL}}" --blackduck.api.token="${{ secrets.BLACKDUCK_API_TOKEN}}" --detect.risk.report.pdf=true'
+    
+    - uses: actions/upload-artifact@v2
+      with:
+          name: BlackDuck Report
+          path: ./*RiskReport*
