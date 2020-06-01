@@ -22,21 +22,13 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
-
     - name: Build
       run: go build -v .
 
-    - name: Test
+    - name: Unit Test
       run: go test -v .
 
-    - name: Synopsys Detect
+    - name: Black Duck Scan
       uses: blackducksoftware/github-action@2.0.0
       with:
         args: '--blackduck.url="${{ secrets.BLACKDUCK_URL}}" --blackduck.api.token="${{ secrets.BLACKDUCK_API_TOKEN}}" --detect.risk.report.pdf=true'
