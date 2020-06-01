@@ -24,7 +24,6 @@ jobs:
     ## Deployment Tracking ##
     - name: Register Deployment
       run: echo ::set-env name=DEPLOYMENT_TRACK_ID::$(deployment-api-cli create -e production -v 1.2 -c $GITHUB_SHA | cut -d '/' -f 3)
-      #run:  deployment-api-cli create -e production -v 1.2 -c $GITHUB_SHA | cut -d '/' -f 3
       env: 
         DEPLOYMENT_API_TOKEN: ${{ secrets.DEPLOYMENT_API_TOKEN }}
         DEPLOYMENT_API_URL: ${{ secrets.DEPLOYMENT_API_URL }}
