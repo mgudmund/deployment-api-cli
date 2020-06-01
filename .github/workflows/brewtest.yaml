@@ -43,7 +43,7 @@ jobs:
       if: ${{ success() }} 
     
     - name: Set Failed Deployment
-      run: deployment-api-cli update -d $DEPLOYMENT_TRACK_ID -s failure
+      run: deployment-api-cli update -d $DEPLOYMENT_TRACK_ID -s failed
       if: ${{ failure() }}
 
     - name: Set Cancelled Deployment
