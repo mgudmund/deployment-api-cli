@@ -35,7 +35,7 @@ jobs:
 
     ## Run deploy
     - name: Deploy App
-      run: wait 20 && echo "Deployment Successful"
+      run: sleep 10 && echo "Deployment Successful"
 
     ## Deployment Tracking
     - name: Set Successful Deployment
