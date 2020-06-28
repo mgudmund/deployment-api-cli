@@ -39,10 +39,10 @@ jobs:
    #       path: ./*RiskReport*
     - uses: AppThreat/sast-scan-action@master
       with:
-          type: "go"
+        type: "go"
 
     - uses: actions/upload-artifact@v1
       with:
-          name: reports
-          path: reports
+        name: reports
+        path: reports
          
