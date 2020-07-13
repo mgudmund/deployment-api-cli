@@ -37,12 +37,8 @@ jobs:
    #   with:
    #       name: BlackDuck Report
    #       path: ./*RiskReport*
-    - uses: AppThreat/sast-scan-action@master
+    - name: Run Gosec Security Scanner
+      uses: securego/gosec@master
       with:
-        type: "go"
-
-    - uses: actions/upload-artifact@v1
-      with:
-        name: reports
-        path: reports
+        args: ./...
          
