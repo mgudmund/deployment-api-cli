@@ -1,4 +1,6 @@
 # Deployment API Cli
+![Go CI](https://github.com/mgudmund/deployment-api-cli/workflows/Go%20CI/badge.svg)
+
 This is an MVP of a cli for our deployment metrics API. 
 
 You need to have a product-spec.yaml in the directory where the command is executed. 
